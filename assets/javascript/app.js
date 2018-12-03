@@ -1,74 +1,109 @@
 
+$(document).ready(function () {
+  // Use this array to dynamically create buttons on the screen.
+  var topics = ["velociraptor", "tyrannosaurus rex", "Ian Malcom", "Dr. Grant", "triceratops", "Dr. Sattler", "pterodactyl", "Jurassic World", "fractals", "chaos theory"];
+  for (var i = 0; i < topics.length; i++) {
+    var topicBtn = $("<button>");
+    topicBtn.addClass("topic-button topic topic-button-color");
+    topicBtn.attr("data-topic", topics[i]);
+    topicBtn.text(topics[i]);
+    $("#buttons").append(topicBtn);
+  }
 
-var queryURL = "https://api.giphy.com/v1/gifs/search?q=welcome+to+st+tropez&api_key=kRcBXTTQnIbH9NYdGXaggMM2onGvBFAR";
+  // Create an "on-click" event attached to the ".topic-button" class.
+  $(".topic-button").on("click", function () {
+    buttonInput = $(this).text();
+    getgifz(buttonInput);
+  }
+  );
 
-$.ajax({
-  url: queryURL,
-  method: "GET"
-}).then(function(response) {
-  console.log(response);
-  $("#gifs").append("<img src=" + response.data[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].images.url + "/>")
-  console.log(response.data[3].images.downsized);
-});
-
-
-  $(document).ready(function() {
-
-
-    // Use this array to dynamically create buttons on the screen.
-    var topics = ["jet", "money", "Dolce & Gabbana", "Gucci", "Louis Vuitton", "yacht", "Ferrari", "Maranello", "St. Tropez", "Egyptian cotton", "poppin' bottles", "Lamborghini Murcielago", 
-"Harley-Davidson", "Maserati", "Gallardo", "Welcome to St. Tropez" ];
-
-    // MAJOR TASK #1: DYNAMICALLY CREATE BUTTONS
-    // =================================================================================
-
-    // 1. Create a for-loop to iterate through the topics array.
-    for (var i = 0; i < topics.length; i++) {
-      // 2. Create a variable named "topicBtn" equal to $("<button>");
-      var topicBtn = $("<button>");
-      // 3. Then give each "topicBtn" the following classes: "topic-button" "topic" "topic-button-color".
-      topicBtn.addClass("topic-button topic topic-button-color");
-      // 4. Then give each "topicBtn" a data-attribute called "data-topic".
-      topicBtn.attr("data-topic", topics[i]);
-      // 5. Then give each "topicBtns" a text equal to "topics[i]".
-      topicBtn.text(topics[i]);
-      // 6. Finally, append each "topicBtn" to the "#buttons" div (provided).
-      $("#buttons").append(topicBtn);
-    }
-
-    // MAJOR TASK #2: ATTACH ON-CLICK EVENTS TO "LETTER" BUTTONS
-    // =================================================================================
-
-    // 7. Create an "on-click" event attached to the ".letter-button" class.
-    $(".topic-button").on("click", function() {
-      // Inside the on-click event...
-      // 8. Create a variable called "topicButton " and set the variable equal to a new div.
-      var topicButton = $("<div>");
-      // 9. Give each "topicButton" the following classes: "letter fridge-color".
-      topicButton.addClass("letter fridge-color");
-      // 10. Then chain the following code onto the "topicButton" variable: .text($(this).attr("data-letter"))
-      // attr acts as both a setter and a getter for attributes depending on whether we supply one argument or two
-      // NOTE: There IS a $(data) jQuery method, but it doesn't do what you'd expect. So just use attr.
-      topicButton.text($(this).attr("data-letter"));
-      // 11. Lastly append the topicButton variable to the "#display" div (provided);
-      // Again you can see we use that find, and once its found we append the item
-      $("#display").append(topicButton);
-    });
-
-    // MAJOR TASK #3: ATTACH ON-CLICK EVENTS TO "CLEAR" BUTTON
-    // =================================================================================
-    // 12. Create an "on-click" event attached to the "#clear" button id.
-    $("#clear").on("click", function() {
-
-      // Inside the on-click event...
-
-      // 13. Use the jQuery "empty()" method to clear the contents of the "#display" div.
-      // We use find here and once its found it will empty the element
-      $("#display").empty();
-
-    });
-
+  // Provide for a clear button.
+  $("#clear").on("click", function () {
+    $("#gifs").empty();
   });
+
+  //Here's the function for fetching the .gifs. It pulls the name of each button from the .onclick event further below.
+  function getgifz(buttonInput) {
+    console.log(buttonInput);
+    var queryURL = ("https://api.giphy.com/v1/gifs/search?q=" + buttonInput + "&api_key=dc6zaTOxFJmzC&limit=10");
+    console.log(queryURL);
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function (response) {
+      console.log(response);
+
+      for (var g = 0; g < response.data.length; g++) {
+        var imgDiv = $("#gifs");
+        var stillURL = response.data[g].images.fixed_width_still.url;
+        var animatedURL = response.data[g].images.fixed_width.url;
+        var imageRating = response.data[g].rating;
+        var imgBox = $("<img>");
+        var imgRat = $("<p>").text("Rating: " + imageRating);
+
+        imgBox.attr("src", stillURL, animatedURL);
+        imgBox.attr("data-state", "still")
+        imgRat.attr(imageRating);
+        imgDiv.append(imgBox);
+        imgDiv.append(imgRat);
+        $("#gifs").prepend(imgDiv);
+      };
+
+      //Set up the animate/deanimate logic.
+      $("<img>").on("click", function () {
+        console.log("clicked!")
+        // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+        var state = $(this).attr("data-state");
+        // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+        // Then, set the image's data-state to animate
+        // Else set src to the data-still value
+        if (state === "still") {
+          $(this).attr("src", $(this).attr("src", animatedURL));
+          $(this).attr("data-state", "animate");
+          console.log("animate!")
+        }
+        else {
+          $(this).attr("src", $(this).attr("src", stillURL));
+          $(this).attr("data-state", "still");
+          console.log("deanimate!")
+        }
+      });
+    })
+  };
+})
+
+      //Each one of these appends a different .gif from the data pulled.
+      // $("#gifs").append("<br>")
+      // $("#gifs").append("<div class='row'>")
+      // $("#gifs").append("<img width=250px src=" + response.data[0].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[1].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[2].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[3].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[4].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[5].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[6].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[7].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[8].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("<img width=250px src=" + response.data[9].images.fixed_width_still.url + "/>")
+      // $("#gifs").append("</div>")
+      // console.log(response.data[3].images.downsized);
+
+
+
+      //img on-click animation start/stop function
+
+      // $(".img").on("click", function(){
+      //   var stateCounter = 0;
+
+      //     if(stateCounter == 0){
+      //       stateCounter++;
+      //       $(this).attr("src", $(this).attr(response.data[0].images.fixed_width.url))
+
+      //     }
+
+
+
 
 
 // Before you can make any part of our site work, you need to create an array of strings, each one related to a topic that interests you. Save it to a variable called topics.
@@ -76,24 +111,24 @@ $.ajax({
 
 
 // We chose animals for our theme, but you can make a list to your own liking.
-//WELCOME TO ST. TROPEZ
+//Jurassic Park bruh
 
 
 // Your app should take the topics in this array and create buttons in your HTML. DONE
 // Try using a loop that appends a button for each string in the array. DONE
 //This is going to require a loop such as th one used in the refrigerator magnet exercise. YUPPERS
 
-// When the user clicks on a button, the page should grab 10 static, non-animated gif images from the GIPHY API and place them on the page.
-// This shouldn't be too challenging, this has to do with configureing the 'limit' parameter in the API query. In terms of placing them on the page,
-// I believe it's 'append' that we're looking for here--the one that adds to the html, rather than substituting it
+// When the user clicks on a button, the page should grab 10 static, non-animated gif images from the GIPHY API and place them on the page. DONE
 
-// When the user clicks one of the still GIPHY images, the gif should animate. If the user clicks the gif again, it should stop playing.
+// When the user clicks one of the still GIPHY images, the gif should animate. If the user clicks the gif again, it should stop playing. NOT DONE
 //?? I assume this is in the API documentation
 
-// Under every gif, display its rating (PG, G, so on).
+// Under every gif, display its rating (PG, G, so on). NOT DONE
 //This'll be part of the query... Use object notation to pull it out of the information povided by the API and append it to the HTML
 
 // This data is provided by the GIPHY API.
+
+
 // Only once you get images displaying with button presses should you move on to the next step.
 
 
