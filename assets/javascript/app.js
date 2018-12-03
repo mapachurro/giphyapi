@@ -72,7 +72,8 @@ $(document).ready(function () {
     })
   };
 })
-
+      //This is an earlier version of my code, which properly populated a horizontal row with .gifs, but its static nature does not allow for
+      //the kind of start-stop animation functionality the assignment requires. I think.
       //Each one of these appends a different .gif from the data pulled.
       // $("#gifs").append("<br>")
       // $("#gifs").append("<div class='row'>")
@@ -106,6 +107,48 @@ $(document).ready(function () {
 
 
 
+
+
+    // MAJOR TASK #1: DYNAMICALLY CREATE BUTTONS
+    // =================================================================================
+
+    // 1. Create a for-loop to iterate through the topics array.
+    for (var i = 0; i < topics.length; i++) {
+      // 2. Create a variable named "topicBtn" equal to $("<button>");
+      var topicBtn = $("<button>");
+      // 3. Then give each "topicBtn" the following classes: "topic-button" "topic" "topic-button-color".
+      topicBtn.addClass("topic-button topic topic-button-color");
+      // 4. Then give each "topicBtn" a data-attribute called "data-topic".
+      topicBtn.attr("data-topic", topics[i]);
+      // 5. Then give each "topicBtns" a text equal to "topics[i]".
+      topicBtn.text(topics[i]);
+      // 6. Finally, append each "topicBtn" to the "#buttons" div (provided).
+      $("#buttons").append(topicBtn);
+    }
+
+    // MAJOR TASK #2: ATTACH ON-CLICK EVENTS TO "TOPIC" BUTTONS
+    // =================================================================================
+
+    // 7. Create an "on-click" event attached to the ".topic-button" class.
+    $(".topic-button").on("click", function() {
+      buttonInput= $(this).text();
+      getgifz(buttonInput);
+    }
+    );
+
+    // MAJOR TASK #3: ATTACH ON-CLICK EVENTS TO "CLEAR" BUTTON
+    // =================================================================================
+
+    // 12. Create an "on-click" event attached to the "#clear" button id.
+    $("#clear").on("click", function() {
+
+      // 13. Use the jQuery "empty()" method to clear the contents of the "#display" div.
+      // We use find here and once its found it will empty the element
+      $("#gifs").empty();
+    });
+  });
+
+
 // Before you can make any part of our site work, you need to create an array of strings, each one related to a topic that interests you. Save it to a variable called topics.
 
 
@@ -113,6 +156,9 @@ $(document).ready(function () {
 // We chose animals for our theme, but you can make a list to your own liking.
 //Jurassic Park bruh
 
+// Your app should take the topics in this array and create buttons in your HTML. DONE
+// Try using a loop that appends a button for each string in the array. DONE
+//This is going to require a loop such as th one used in the refrigerator magnet exercise. YUPPERS
 
 // Your app should take the topics in this array and create buttons in your HTML. DONE
 // Try using a loop that appends a button for each string in the array. DONE
