@@ -1,0 +1,9 @@
+img {float: left;
+     padding: 10px;
+}
+
+p {
+    float: left;
+    /* clear: above; */
+    padding: 2px;
+}

@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="./assets/javascript/app.js"></script>
-<script src="./assets/css/style.css"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./assets/javascript/app.js"></script>
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
+
 <body>
-    <div class="row">
-    <div id="display"></div>
-    <div id="buttons"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-9" id="display"></div>
+            <div id="buttons"></div>
+            <br>
+            <form id="search-form">
+                <label for="search-input">Search for a gif</label>
+                <input type="text" id="search-input"><br>
+          
+                <input id="find-gif" type="submit" value="gif search">
+              </form>
+
+            <br>
+            <button id="clear">clear</button>
+        </div>
     </div>
 
-    <br>
-    <br>
-    
-    <button id="clear">clear</button>
 
     <br>
-    <div class="row">
-    <div id="gifs"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-9" id="gifs">
+            </div>
     </div>
+</div>
 
 
 

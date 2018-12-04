@@ -2,24 +2,41 @@
 $(document).ready(function () {
   // Use this array to dynamically create buttons on the screen.
   var topics = ["velociraptor", "tyrannosaurus rex", "Ian Malcom", "Dr. Grant", "triceratops", "Dr. Sattler", "pterodactyl", "Jurassic World", "fractals", "chaos theory"];
-  for (var i = 0; i < topics.length; i++) {
-    var topicBtn = $("<button>");
-    topicBtn.addClass("topic-button topic topic-button-color");
-    topicBtn.attr("data-topic", topics[i]);
-    topicBtn.text(topics[i]);
-    $("#buttons").append(topicBtn);
-  }
+
+  function buttonz() {
+    for (var i = 0; i < topics.length; i++) {
+      var topicBtn = $("<button>");
+      topicBtn.addClass("topic-button");
+      topicBtn.attr("data-topic", topics[i]);
+      topicBtn.text(topics[i]);
+      $("#buttons").append(topicBtn);
+    }
+  };
+
+  buttonz();
 
   // Create an "on-click" event attached to the ".topic-button" class.
   $(".topic-button").on("click", function () {
     buttonInput = $(this).text();
     getgifz(buttonInput);
-  }
-  );
+  });
 
   // Provide for a clear button.
   $("#clear").on("click", function () {
     $("#gifs").empty();
+  });
+
+  //The search box function--adding a new term to the list. 
+  //CURRENTLY QUASI-FUNCTIONAL: It adds a button. But then the button 
+  //doesn't work the way the rest do, nor do any of the rest.
+  $("#find-gif").on("click", function (event) {
+    event.preventDefault();
+    var userGIF = $("#search-input").val();
+    console.log(userGIF)
+    topics.push(userGIF);
+    console.log(topics);
+    $("#buttons").empty();
+    buttonz();
   });
 
   //Here's the function for fetching the .gifs. It pulls the name of each button from the .onclick event further below.
@@ -40,68 +57,37 @@ $(document).ready(function () {
         var animatedURL = response.data[g].images.fixed_width.url;
         var imageRating = response.data[g].rating;
         var imgBox = $("<img>");
-        var imgRat = $("<p>").text("Rating: " + imageRating);
+        var ratBox = $("<p>").append("Rating: " + imageRating);
 
-        imgBox.attr("src", stillURL, animatedURL);
-        imgBox.attr("data-state", "still")
-        imgRat.attr(imageRating);
-        imgDiv.append(imgBox);
-        imgDiv.append(imgRat);
-        $("#gifs").prepend(imgDiv);
+        imgBox.attr("src", stillURL);
+        imgBox.attr("data-still", stillURL);
+        imgBox.attr("data-animated", animatedURL);
+        imgBox.attr("data-state", "still");
+        imgDiv.prepend(imgBox);
+        imgDiv.prepend(ratBox);
       };
 
       //Set up the animate/deanimate logic.
-      $("<img>").on("click", function () {
+      $("img").on("click", function () {
         console.log("clicked!")
-        // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+
         var state = $(this).attr("data-state");
-        // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-        // Then, set the image's data-state to animate
-        // Else set src to the data-still value
+        console.log(state);
+
         if (state === "still") {
-          $(this).attr("src", $(this).attr("src", animatedURL));
+          $(this).attr("src", $(this).attr("data-animated"));
           $(this).attr("data-state", "animate");
           console.log("animate!")
         }
         else {
-          $(this).attr("src", $(this).attr("src", stillURL));
+          $(this).attr("src", $(this).attr("data-still"));
           $(this).attr("data-state", "still");
           console.log("deanimate!")
         }
       });
     })
   };
-})
-      //This is an earlier version of my code, which properly populated a horizontal row with .gifs, but its static nature does not allow for
-      //the kind of start-stop animation functionality the assignment requires. I think.
-      //Each one of these appends a different .gif from the data pulled.
-      // $("#gifs").append("<br>")
-      // $("#gifs").append("<div class='row'>")
-      // $("#gifs").append("<img width=250px src=" + response.data[0].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[1].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[2].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[3].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[4].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[5].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[6].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[7].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[8].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("<img width=250px src=" + response.data[9].images.fixed_width_still.url + "/>")
-      // $("#gifs").append("</div>")
-      // console.log(response.data[3].images.downsized);
-
-
-
-      //img on-click animation start/stop function
-
-      // $(".img").on("click", function(){
-      //   var stateCounter = 0;
-
-      //     if(stateCounter == 0){
-      //       stateCounter++;
-      //       $(this).attr("src", $(this).attr(response.data[0].images.fixed_width.url))
-
-      //     }
+});
 
 
 // Before you can make any part of our site work, you need to create an array of strings, each one related to a topic that interests you. Save it to a variable called topics.
@@ -121,8 +107,7 @@ $(document).ready(function () {
 
 // When the user clicks on a button, the page should grab 10 static, non-animated gif images from the GIPHY API and place them on the page. DONE
 
-// When the user clicks one of the still GIPHY images, the gif should animate. If the user clicks the gif again, it should stop playing. NOT DONE
-//?? I assume this is in the API documentation
+// When the user clicks one of the still GIPHY images, the gif should animate. If the user clicks the gif again, it should stop playing. DONE
 
 // Under every gif, display its rating (PG, G, so on). NOT DONE
 //This'll be part of the query... Use object notation to pull it out of the information povided by the API and append it to the HTML
