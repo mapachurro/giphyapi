@@ -14,18 +14,7 @@ $(document).ready(function () {
   };
 
   buttonz();
-
-  // Create an "on-click" event attached to the ".topic-button" class.
-  $(".topic-button").on("click", function () {
-    buttonInput = $(this).text();
-    getgifz(buttonInput);
-  });
-
-  // Provide for a clear button.
-  $("#clear").on("click", function () {
-    $("#gifs").empty();
-  });
-
+  
   //The search box function--adding a new term to the list. 
   //CURRENTLY QUASI-FUNCTIONAL: It adds a button. But then the button 
   //doesn't work the way the rest do, nor do any of the rest.
@@ -38,6 +27,20 @@ $(document).ready(function () {
     $("#buttons").empty();
     buttonz();
   });
+
+  // Create an "on-click" event attached to the ".topic-button" class.
+  $('body').on("click", '.topic-button', function () {
+    buttonInput = $(this).text();
+    console.log(buttonInput);
+    getgifz(buttonInput);
+  });
+
+  // Provide for a clear button.
+  $("#clear").on("click", function () {
+    $("#gifs").empty();
+  });
+
+
 
   //Here's the function for fetching the .gifs. It pulls the name of each button from the .onclick event further below.
   function getgifz(buttonInput) {
@@ -56,15 +59,17 @@ $(document).ready(function () {
         var stillURL = response.data[g].images.fixed_width_still.url;
         var animatedURL = response.data[g].images.fixed_width.url;
         var imageRating = response.data[g].rating;
+        var imgCol = $("<div class='col'>"); 
         var imgBox = $("<img>");
-        var ratBox = $("<p>").append("Rating: " + imageRating);
+        var ratBox = $("<div class='caption'>").append("Rating: " + imageRating);
 
         imgBox.attr("src", stillURL);
         imgBox.attr("data-still", stillURL);
         imgBox.attr("data-animated", animatedURL);
         imgBox.attr("data-state", "still");
-        imgDiv.prepend(imgBox);
-        imgDiv.prepend(ratBox);
+        imgDiv.prepend(imgCol);
+        imgCol.prepend(imgBox);
+        imgCol.append(ratBox);
       };
 
       //Set up the animate/deanimate logic.
@@ -91,8 +96,6 @@ $(document).ready(function () {
 
 
 // Before you can make any part of our site work, you need to create an array of strings, each one related to a topic that interests you. Save it to a variable called topics.
-
-
 
 // We chose animals for our theme, but you can make a list to your own liking.
 //Jurassic Park bruh

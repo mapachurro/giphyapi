@@ -1,9 +1,67 @@
-img {float: left;
-     padding: 10px;
+html {
+    min-height: 100%;
+    position: relative;
+  }
+  
+  body {font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+      background-image: url(../images/giungla.jpg);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100%;
+    }
+  
+  .p {
+      color: red;
+  }
+    #footer {
+      bottom: 0;
+      width: 100%;
+      position: absolute;
+      background-color: black;
+      text-align: center;
+      weight: bold;
+      color: red;
+    }
+
+#search-form {
+    color: red;
 }
 
-p {
+
+
+
+
+
+
+
+/* gif rows
+   =====================
+*/
+
+.row {
+    display: flex;
+    flex-flow: row wrap;
+  }
+  
+  .col {
+    flex: 1 1 30%;
+    flex-flow: row wrap;
+    flex-direction: row;
+    margin-left: 20px;
     float: left;
-    /* clear: above; */
-    padding: 2px;
-}
+  }
+  
+  .col-heading {
+    flex: 2;
+  }
+  
+  /* gif heading
+     ========================
+  */
+  
+  .col-heading {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
